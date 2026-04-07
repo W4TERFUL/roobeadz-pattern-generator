@@ -3,6 +3,13 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --pink: #ff5096;
+  --blue-grid: #e0e8ff;
+  --yellow: #ffd642;
+  --green: #6ddb7a;
+  --cream: #f5efe6;
+  --dark: #1a1a2e;
+  --white: #fff;
 }
 
 @theme inline {
@@ -10,6 +17,9 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-pixel: var(--font-pixel);
+  --font-body: var(--font-body);
+  --font-cn: var(--font-cn);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -19,8 +29,41 @@
   }
 }
 
+/* Force square corners everywhere - Pixel Y2K style */
+* {
+  border-radius: 0 !important;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body), Arial, Helvetica, sans-serif;
+  /* Grid paper background */
+  background-image:
+    linear-gradient(var(--blue-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--blue-grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Override Tailwind border-radius utilities */
+.rounded, .rounded-sm, .rounded-md, .rounded-lg, .rounded-xl, .rounded-2xl, .rounded-3xl, .rounded-full {
+  border-radius: 0 !important;
+}
+
+/* Pixel box shadow utility */
+.pixel-shadow {
+  box-shadow: 4px 4px 0px var(--dark);
+}
+
+.pixel-shadow-sm {
+  box-shadow: 2px 2px 0px var(--dark);
+}
+
+/* Pixel border utility */
+.pixel-border {
+  border: 3px solid var(--dark);
+}
+
+.pixel-border-2 {
+  border: 2px solid var(--dark);
 }

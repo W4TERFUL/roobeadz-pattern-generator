@@ -1,11 +1,11 @@
 {
-  "name": "七卡瓦拼豆底稿生成器",
-  "short_name": "七卡瓦",
-  "description": "七卡瓦拼豆底稿生成器，让你轻松制作精美的像素画作品",
+  "name": "ROO BEADZ Pattern Generator",
+  "short_name": "ROO BEADZ",
+  "description": "Convert images to fuse bead patterns with MARD color matching",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#E8F4FD",
-  "theme_color": "#5CA4F5",
+  "background_color": "#e0e8ff",
+  "theme_color": "#ff5096",
   "orientation": "portrait-primary",
   "icons": [
     {
@@ -45,5 +45,5 @@
     }
   ],
   "categories": ["utilities", "productivity"],
-  "lang": "zh-CN"
+  "lang": "en"
 }

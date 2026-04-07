@@ -1,16 +1,12 @@
 import { PaletteColor } from './pixelation';
 import colorSystemMapping from '../app/colorSystemMapping.json';
 
-// 定义色号系统类型并导出
-export type ColorSystem = 'MARD' | 'COCO' | '漫漫' | '盼盼' | '咪小窝';
+// 定义色号系统类型并导出 - Only MARD is supported
+export type ColorSystem = 'MARD';
 
-// 色号系统选项
+// 色号系统选项 - Only MARD
 export const colorSystemOptions = [
   { key: 'MARD', name: 'MARD' },
-  { key: 'COCO', name: 'COCO' },
-  { key: '漫漫', name: '漫漫' },
-  { key: '盼盼', name: '盼盼' },
-  { key: '咪小窝', name: '咪小窝' },
 ];
 
 // 类型定义

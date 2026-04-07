@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState, useRef, ChangeEvent, DragEvent, useEffect, useMemo, useCallback } from 'react';
-import Script from 'next/script';
-import InstallPWA from '../components/InstallPWA';
+// Script and InstallPWA removed for ROO BEADZ rebrand
 
 // 导入像素化工具和类型
 import {
@@ -21,26 +20,15 @@ import { GridDownloadOptions } from '../types/downloadTypes';
 import DownloadSettingsModal, { gridLineColorOptions } from '../components/DownloadSettingsModal';
 import { downloadImage, importCsvData } from '../utils/imageDownloader';
 
-import { 
-  colorSystemOptions, 
-  convertPaletteToColorSystem, 
+import {
+  convertPaletteToColorSystem,
   getColorKeyByHex,
   getMardToHexMapping,
   sortColorsByHue,
-  ColorSystem 
+  ColorSystem
 } from '../utils/colorSystemUtils';
 
-// 添加自定义动画样式
-const floatAnimation = `
-  @keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-5px); }
-    100% { transform: translateY(0px); }
-  }
-  .animate-float {
-    animation: float 3s ease-in-out infinite;
-  }
-`;
+// Float animation removed for ROO BEADZ rebrand
 
 // Helper function for sorting color keys - 保留原有实现，因为未在utils中导出
 function sortColorKeys(a: string, b: string): number {
@@ -85,16 +73,15 @@ const fullBeadPalette: PaletteColor[] = Object.entries(mardToHexMapping)
 // 1. 导入新组件
 import PixelatedPreviewCanvas from '../components/PixelatedPreviewCanvas';
 import GridTooltip from '../components/GridTooltip';
-import CustomPaletteEditor from '../components/CustomPaletteEditor';
+// CustomPaletteEditor removed for ROO BEADZ rebrand
 import FloatingColorPalette from '../components/FloatingColorPalette';
 import FloatingToolbar from '../components/FloatingToolbar';
 import MagnifierTool from '../components/MagnifierTool';
 import MagnifierSelectionOverlay from '../components/MagnifierSelectionOverlay';
-import { loadPaletteSelections, savePaletteSelections, presetToSelections, PaletteSelections } from '../utils/localStorageUtils';
+import { loadPaletteSelections, presetToSelections, PaletteSelections } from '../utils/localStorageUtils';
 import { TRANSPARENT_KEY, transparentColorData } from '../utils/pixelEditingUtils';
 
-// 1. 导入新的 DonationModal 组件
-import DonationModal from '../components/DonationModal';
+// DonationModal removed for ROO BEADZ rebrand
 import FocusModePreDownloadModal from '../components/FocusModePreDownloadModal';
 
 export default function Home() {
@@ -106,8 +93,8 @@ export default function Home() {
   // 添加像素化模式状态
   const [pixelationMode, setPixelationMode] = useState<PixelationMode>(PixelationMode.Dominant); // 默认为卡通模式
   
-  // 新增：色号系统选择状态
-  const [selectedColorSystem, setSelectedColorSystem] = useState<ColorSystem>('MARD');
+  // Hard-coded to MARD color system
+  const selectedColorSystem: ColorSystem = 'MARD';
   
   const [activeBeadPalette, setActiveBeadPalette] = useState<PaletteColor[]>(() => {
       return fullBeadPalette; // 默认使用全部颜色
@@ -127,11 +114,8 @@ export default function Home() {
   const [selectedColor, setSelectedColor] = useState<MappedPixel | null>(null);
   // 新增：一键擦除模式状态
   const [isEraseMode, setIsEraseMode] = useState<boolean>(false);
-  // 新增状态变量：控制打赏弹窗
-  const [isDonationModalOpen, setIsDonationModalOpen] = useState<boolean>(false);
   const [customPaletteSelections, setCustomPaletteSelections] = useState<PaletteSelections>({});
-  const [isCustomPaletteEditorOpen, setIsCustomPaletteEditorOpen] = useState<boolean>(false);
-  const [isCustomPalette, setIsCustomPalette] = useState<boolean>(false);
+  // isCustomPalette state removed - MARD only
   
   // ++ 新增：下载设置相关状态 ++
   const [isDownloadSettingsOpen, setIsDownloadSettingsOpen] = useState<boolean>(false);
@@ -182,8 +166,7 @@ export default function Home() {
   // 新增：专心拼豆模式进入前下载提醒弹窗
   const [isFocusModePreDownloadModalOpen, setIsFocusModePreDownloadModalOpen] = useState<boolean>(false);
 
-  // 新增：横屏设备弹窗状态
-  const [showDesktopModal, setShowDesktopModal] = useState<boolean>(false);
+  // Desktop modal removed for ROO BEADZ rebrand
 
   // 放大镜切换处理函数
   const handleToggleMagnifier = () => {
@@ -259,7 +242,7 @@ export default function Home() {
   const pixelatedCanvasRef = useRef<HTMLCanvasElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   // ++ 添加: Ref for import file input ++
-  const importPaletteInputRef = useRef<HTMLInputElement>(null);
+  // importPaletteInputRef removed - custom palette editor removed
   //const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
   // ++ Re-add touch refs needed for tooltip logic ++
   //const touchStartPosRef = useRef<{ x: number; y: number; pageX: number; pageY: number } | null>(null);
@@ -347,7 +330,7 @@ export default function Home() {
       
       if (hasValidData) {
         setCustomPaletteSelections(validSelections);
-    setIsCustomPalette(true);
+    // isCustomPalette removed
     } else {
         console.log('所有数据都无效，清除localStorage并重新初始化');
         // 如果本地数据无效，清除localStorage并默认选择所有颜色
@@ -355,7 +338,7 @@ export default function Home() {
         const allHexValues = fullBeadPalette.map(color => color.hex.toUpperCase());
         const initialSelections = presetToSelections(allHexValues, allHexValues);
       setCustomPaletteSelections(initialSelections);
-      setIsCustomPalette(false);
+      // isCustomPalette removed
     }
     } else {
       console.log('没有localStorage数据，默认选择所有颜色');
@@ -363,7 +346,7 @@ export default function Home() {
       const allHexValues = fullBeadPalette.map(color => color.hex.toUpperCase());
       const initialSelections = presetToSelections(allHexValues, allHexValues);
       setCustomPaletteSelections(initialSelections);
-      setIsCustomPalette(false);
+      // isCustomPalette removed
     }
   }, []); // 只在组件首次加载时执行
 
@@ -1013,55 +996,9 @@ export default function Home() {
     setIsMounted(true);
   }, []);
 
-  // 强制显示专业工作台弹窗（每次进入页面都弹，引导用户前往新版）
-  useEffect(() => {
-    setShowDesktopModal(true);
-  }, []);
+  // Desktop modal removed for ROO BEADZ rebrand
 
-  // 添加URL重定向检查
-  useEffect(() => {
-    // 检查是否在浏览器环境中
-    if (typeof window !== 'undefined') {
-      const currentUrl = window.location.href;
-      const currentHostname = window.location.hostname;
-      const targetDomain = 'https://perlerbeads.zippland.com/';
-      
-      // 排除localhost和127.0.0.1等本地开发环境
-      const isLocalhost = currentHostname === 'localhost' || 
-                         currentHostname === '127.0.0.1' || 
-                         currentHostname.startsWith('192.168.') ||
-                         currentHostname.startsWith('10.') ||
-                         currentHostname.endsWith('.local');
-      
-      // 检查当前URL是否不是目标域名，且不是本地开发环境
-      if (!currentUrl.startsWith(targetDomain) && !isLocalhost) {
-        console.log(`当前URL: ${currentUrl}`);
-        console.log(`目标URL: ${targetDomain}`);
-        console.log('正在重定向到官方域名...');
-        
-        // 保留当前路径和查询参数
-        const currentPath = window.location.pathname;
-        const currentSearch = window.location.search;
-        const currentHash = window.location.hash;
-        
-        // 构建完整的目标URL
-        let redirectUrl = targetDomain;
-        
-        // 如果不是根路径，添加路径
-        if (currentPath && currentPath !== '/') {
-          redirectUrl = redirectUrl.replace(/\/$/, '') + currentPath;
-        }
-        
-        // 添加查询参数和哈希
-        redirectUrl += currentSearch + currentHash;
-        
-        // 执行重定向
-        window.location.replace(redirectUrl);
-      } else if (isLocalhost) {
-        console.log(`检测到本地开发环境 (${currentHostname})，跳过重定向`);
-      }
-    }
-  }, []); // 只在组件首次挂载时执行
+  // URL redirect removed for ROO BEADZ rebrand
 
     // --- Download function (ensure filename includes palette) ---
     const handleDownloadRequest = (options?: GridDownloadOptions) => {
@@ -1568,135 +1505,7 @@ export default function Home() {
     }
   };
 
-  // 处理自定义色板中单个颜色的选择变化
-  const handleSelectionChange = (hexValue: string, isSelected: boolean) => {
-    const normalizedHex = hexValue.toUpperCase();
-    setCustomPaletteSelections(prev => ({
-      ...prev,
-      [normalizedHex]: isSelected
-    }));
-    setIsCustomPalette(true);
-  };
-
-  // 保存自定义色板并应用
-  const handleSaveCustomPalette = () => {
-    savePaletteSelections(customPaletteSelections);
-    setIsCustomPalette(true);
-    setIsCustomPaletteEditorOpen(false);
-    // 触发图像重新处理
-    setRemapTrigger(prev => prev + 1);
-    // 退出手动上色模式
-    setIsManualColoringMode(false);
-    setSelectedColor(null);
-    setIsEraseMode(false);
-  };
-
-  // ++ 新增：导出自定义色板配置 ++
-  const handleExportCustomPalette = () => {
-    const selectedHexValues = Object.entries(customPaletteSelections)
-      .filter(([, isSelected]) => isSelected)
-      .map(([hexValue]) => hexValue);
-
-    if (selectedHexValues.length === 0) {
-      alert("当前没有选中的颜色，无法导出。");
-      return;
-    }
-
-    // 导出格式：仅基于hex值
-    const exportData = {
-      version: "3.0", // 新版本号
-      selectedHexValues: selectedHexValues,
-      exportDate: new Date().toISOString(),
-      totalColors: selectedHexValues.length
-    };
-
-    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'custom-perler-palette.json';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
-
-  // ++ 新增：处理导入的色板文件 ++
-  const handleImportPaletteFile = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      try {
-        const content = e.target?.result as string;
-        const data = JSON.parse(content);
-
-        // 检查文件格式
-        if (!Array.isArray(data.selectedHexValues)) {
-          throw new Error("无效的文件格式：文件必须包含 'selectedHexValues' 数组。");
-        }
-
-        console.log("检测到基于hex值的色板文件");
-
-        const importedHexValues = data.selectedHexValues as string[];
-        const validHexValues: string[] = [];
-        const invalidHexValues: string[] = [];
-
-        // 验证hex值
-        importedHexValues.forEach(hex => {
-          const normalizedHex = hex.toUpperCase();
-          const colorData = fullBeadPalette.find(color => color.hex.toUpperCase() === normalizedHex);
-          if (colorData) {
-            validHexValues.push(normalizedHex);
-          } else {
-            invalidHexValues.push(hex);
-          }
-        });
-
-        if (invalidHexValues.length > 0) {
-          console.warn("导入时发现无效的hex值:", invalidHexValues);
-          alert(`导入完成，但以下颜色无效已被忽略：\n${invalidHexValues.join(', ')}`);
-        }
-
-        if (validHexValues.length === 0) {
-          alert("导入的文件中不包含任何有效的颜色。");
-          return;
-        }
-
-        console.log(`成功验证 ${validHexValues.length} 个有效的hex值`);
-
-        // 基于有效的hex值创建新的selections对象
-        const allHexValues = fullBeadPalette.map(color => color.hex.toUpperCase());
-        const newSelections = presetToSelections(allHexValues, validHexValues);
-        setCustomPaletteSelections(newSelections);
-        setIsCustomPalette(true); // 标记为自定义
-        alert(`成功导入 ${validHexValues.length} 个颜色！`);
-
-      } catch (error) {
-        console.error("导入色板配置失败:", error);
-        alert(`导入失败: ${error instanceof Error ? error.message : '未知错误'}`);
-      } finally {
-        // 重置文件输入，以便可以再次导入相同的文件
-        if (event.target) {
-          event.target.value = '';
-        }
-      }
-    };
-    reader.onerror = () => {
-      alert("读取文件失败。");
-       // 重置文件输入
-      if (event.target) {
-        event.target.value = '';
-      }
-    };
-    reader.readAsText(file);
-  };
-
-  // ++ 新增：触发导入文件选择 ++
-  const triggerImportPalette = () => {
-    importPaletteInputRef.current?.click();
-  };
+  // Custom palette editor functions removed for ROO BEADZ rebrand
 
   // 新增：处理颜色高亮
   const handleHighlightColor = (colorHex: string) => {
@@ -1855,304 +1664,63 @@ export default function Home() {
 
   return (
     <>
-    {/* 添加自定义动画样式 */}
-    <style dangerouslySetInnerHTML={{ __html: floatAnimation }} />
-    
-    {/* PWA 安装按钮 */}
-    <InstallPWA />
-    
-    {/* ++ 修改：添加 onLoad 回调函数 ++ */}
-    <Script
-      async
-      src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"
-      strategy="lazyOnload"
-      onLoad={() => {
-        const basePV = 378536; // ++ 预设 PV 基数 ++
-        const baseUV = 257864; // ++ 预设 UV 基数 ++
 
-        const updateCount = (spanId: string, baseValue: number) => {
-          const targetNode = document.getElementById(spanId);
-          if (!targetNode) return;
-
-          const observer = new MutationObserver((mutationsList) => {
-            for (const mutation of mutationsList) {
-              if (mutation.type === 'childList' || mutation.type === 'characterData') {
-                const currentValueText = targetNode.textContent?.trim() || '0';
-                if (currentValueText !== '...') {
-                  const currentValue = parseInt(currentValueText.replace(/,/g, ''), 10) || 0;
-                  targetNode.textContent = (currentValue + baseValue).toLocaleString();
-                  observer.disconnect(); // ++ 更新后停止观察 ++ 
-                  // console.log(`Updated ${spanId} from ${currentValueText} to ${targetNode.textContent}`);
-                  break; // 处理完第一个有效更新即可
-                }
-              }
-            }
-          });
-
-          observer.observe(targetNode, { childList: true, characterData: true, subtree: true });
-
-          // ++ 处理初始值已经是数字的情况 (如果脚本加载很快) ++
-          const initialValueText = targetNode.textContent?.trim() || '0';
-          if (initialValueText !== '...') {
-             const initialValue = parseInt(initialValueText.replace(/,/g, ''), 10) || 0;
-             targetNode.textContent = (initialValue + baseValue).toLocaleString();
-             observer.disconnect(); // 已更新，无需再观察
-          }
-        };
-
-        updateCount('busuanzi_value_site_pv', basePV);
-        updateCount('busuanzi_value_site_uv', baseUV);
-      }}
-    />
-
-    {/* Apply dark mode styles to the main container */}
-    <div className="min-h-screen p-4 sm:p-6 flex flex-col items-center bg-gradient-to-b from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 font-[family-name:var(--font-geist-sans)] overflow-x-hidden">
-      {/* Apply dark mode styles to the header */}
-      <header className="w-full md:max-w-4xl text-center mt-6 mb-8 sm:mt-8 sm:mb-10 relative overflow-hidden">
-        {/* Adjust decorative background colors for dark mode */}
-        <div className="absolute top-0 left-0 w-48 h-48 bg-blue-100 dark:bg-blue-900 rounded-full opacity-30 dark:opacity-20 blur-3xl"></div>
-        <div className="absolute bottom-0 right-0 w-48 h-48 bg-pink-100 dark:bg-pink-900 rounded-full opacity-30 dark:opacity-20 blur-3xl"></div>
-
-        {/* Adjust decorative dots color */}
-        <div className="absolute top-0 right-0 grid grid-cols-5 gap-1 opacity-20 dark:opacity-10">
-          {[...Array(25)].map((_, i) => (
-            <div key={i} className="w-1.5 h-1.5 rounded-full bg-gray-400 dark:bg-gray-600"></div>
-          ))}
-        </div>
-        <div className="absolute bottom-0 left-0 grid grid-cols-5 gap-1 opacity-20 dark:opacity-10">
-          {[...Array(25)].map((_, i) => (
-            <div key={i} className="w-1.5 h-1.5 rounded-full bg-gray-400 dark:bg-gray-600"></div>
-          ))}
-        </div>
-
-        {/* Header content - Ultra fancy integrated logo and titles */}
-        <div className="relative z-10 py-8">
-          {/* Integrated super fancy logo and title container */}
-          <div className="relative flex flex-col items-center">
-            {/* Ultra cute hyper-detailed 16-bead icon */}
-            <div className="relative mb-6 animate-float">
-              <div className="relative grid grid-cols-4 gap-2 p-4 bg-white/95 dark:bg-gray-800/95 rounded-3xl shadow-2xl border-4 border-gradient-to-r from-pink-300 via-purple-300 to-blue-300 dark:border-gray-600">
-                {['bg-red-400', 'bg-blue-400', 'bg-yellow-400', 'bg-green-400',
-                  'bg-purple-400', 'bg-pink-400', 'bg-orange-400', 'bg-teal-400',
-                  'bg-indigo-400', 'bg-cyan-400', 'bg-lime-400', 'bg-amber-400',
-                  'bg-rose-400', 'bg-sky-400', 'bg-emerald-400', 'bg-violet-400'].map((color, i) => (
-                  <div key={i} className="relative">
-                    <div
-                      className={`w-5 h-5 rounded-full ${color} transition-all duration-500 hover:scale-150 shadow-xl hover:shadow-2xl relative z-10`}
-                      style={{
-                        animation: `float ${2 + (i % 3)}s ease-in-out infinite ${i * 0.1}s`,
-                        boxShadow: `0 0 20px ${color.includes('red') ? '#f87171' : color.includes('blue') ? '#60a5fa' : color.includes('yellow') ? '#fbbf24' : color.includes('green') ? '#4ade80' : color.includes('purple') ? '#a855f7' : color.includes('pink') ? '#f472b6' : color.includes('orange') ? '#fb923c' : color.includes('teal') ? '#2dd4bf' : color.includes('indigo') ? '#818cf8' : color.includes('cyan') ? '#22d3ee' : color.includes('lime') ? '#84cc16' : color.includes('amber') ? '#f59e0b' : color.includes('rose') ? '#fb7185' : color.includes('sky') ? '#0ea5e9' : color.includes('emerald') ? '#10b981' : '#8b5cf6'}70`
-                      }}
-                    ></div>
-                    {/* Mini decorations around each bead */}
-                    {i % 4 === 0 && <div className="absolute -top-0.5 -right-0.5 w-1 h-1 bg-yellow-300 rounded-full animate-ping"></div>}
-                    {i % 4 === 1 && <div className="absolute -bottom-0.5 -left-0.5 w-0.5 h-0.5 bg-pink-300 rounded-full animate-pulse"></div>}
-                    {i % 4 === 2 && <div className="absolute -top-0.5 -left-0.5 w-0.5 h-0.5 bg-blue-300 rounded-full animate-bounce"></div>}
-                    {i % 4 === 3 && <div className="absolute -bottom-0.5 -right-0.5 w-1 h-1 bg-purple-300 rounded-full animate-spin"></div>}
-                  </div>
-                ))}
-              </div>
-              
-              {/* Super cute decorations around the icon */}
-              <div className="absolute -top-3 -right-4 w-3 h-3 bg-gradient-to-br from-yellow-400 to-pink-500 rounded-full animate-ping transform rotate-12"></div>
-              <div className="absolute -top-1 -right-2 w-2 h-2 bg-gradient-to-br from-pink-400 to-purple-500 rotate-45 animate-spin"></div>
-              <div className="absolute -bottom-3 -left-4 w-2.5 h-2.5 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-full animate-bounce"></div>
-              <div className="absolute -bottom-1 -left-2 w-1.5 h-1.5 bg-gradient-to-br from-green-400 to-teal-500 rotate-45 animate-pulse"></div>
-              <div className="absolute top-0 -right-1 w-1 h-1 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full animate-pulse delay-100"></div>
-              <div className="absolute -top-2 left-2 w-1 h-1 bg-gradient-to-br from-orange-400 to-red-500 rounded-full animate-bounce delay-200"></div>
-              <div className="absolute bottom-1 -right-3 w-1.5 h-1.5 bg-gradient-to-br from-indigo-400 to-purple-500 rotate-45 animate-spin delay-300"></div>
-              <div className="absolute -bottom-2 right-1 w-0.5 h-0.5 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full animate-ping delay-400"></div>
-              
-              {/* Extra tiny sparkles */}
-              <div className="absolute -top-4 left-1 w-0.5 h-0.5 bg-yellow-300 rounded-full animate-pulse delay-500"></div>
-              <div className="absolute top-2 -left-4 w-0.5 h-0.5 bg-pink-300 rounded-full animate-bounce delay-600"></div>
-              <div className="absolute -bottom-4 right-2 w-0.5 h-0.5 bg-blue-300 rounded-full animate-ping delay-700"></div>
-              <div className="absolute bottom-2 -right-5 w-0.5 h-0.5 bg-purple-300 rounded-full animate-pulse delay-800"></div>
-            </div>
-
-            {/* Ultra fancy brand name and tool name with hyper cute decorations */}
-            <div className="relative flex flex-col items-center space-y-3">
-              {/* Brand name - 七卡瓦 with ultra fancy effects */}
-              <div className="relative">
-                <h1 className="relative text-4xl sm:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 via-blue-500 to-cyan-400 tracking-wider drop-shadow-2xl transform hover:scale-105 transition-transform duration-300">
-                  七卡瓦
-                </h1>
-                
-                {/* Super fancy geometric decorations */}
-                <div className="absolute -top-4 -right-5 w-4 h-4 bg-gradient-to-br from-yellow-400 to-pink-500 rounded-full animate-spin transform rotate-12"></div>
-                <div className="absolute -top-2 -right-2 w-2.5 h-2.5 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full animate-ping"></div>
-                <div className="absolute -top-1 -right-0.5 w-1.5 h-1.5 bg-gradient-to-br from-purple-400 to-blue-500 rotate-45 animate-pulse delay-100"></div>
-                <div className="absolute -bottom-3 -left-5 w-4 h-4 bg-gradient-to-br from-blue-400 to-purple-500 rotate-45 animate-bounce delay-200"></div>
-                <div className="absolute -bottom-1 -left-2 w-2 h-2 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full animate-spin delay-300"></div>
-                <div className="absolute top-0 left-1/2 w-1.5 h-1.5 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full animate-pulse delay-400"></div>
-                <div className="absolute -bottom-4 -right-3 w-3 h-3 bg-gradient-to-br from-cyan-400 to-teal-500 rounded-full animate-bounce delay-500"></div>
-                <div className="absolute top-1 -left-4 w-2 h-2 bg-gradient-to-br from-pink-400 to-red-500 rotate-45 animate-ping delay-600"></div>
-                
-                {/* Extra tiny sparkles around brand name */}
-                <div className="absolute -top-3 left-0 w-1 h-1 bg-yellow-300 rounded-full animate-pulse delay-700"></div>
-                <div className="absolute -top-2 right-3 w-0.5 h-0.5 bg-pink-300 rounded-full animate-bounce delay-800"></div>
-                <div className="absolute bottom-0 -left-1 w-0.5 h-0.5 bg-blue-300 rounded-full animate-ping delay-900"></div>
-                <div className="absolute bottom-1 right-0 w-1 h-1 bg-purple-300 rounded-full animate-pulse delay-1000"></div>
-              </div>
-              
-              {/* Tool name - 拼豆底稿生成器 with hyper cute style */}
-              <div className="relative">
-                <h2 className="relative text-xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-teal-500 via-green-500 to-emerald-400 tracking-widest transform hover:scale-102 transition-all duration-300">
-                  拼豆底稿生成器
-                  <span className="text-xs font-normal text-gray-400 dark:text-gray-500 tracking-widest ml-1 align-middle">竖屏版</span>
-                </h2>
-                
-                {/* Super cute geometric shapes */}
-                <div className="absolute -top-3 -left-6 w-3.5 h-3.5 bg-gradient-to-br from-blue-400 to-teal-500 rounded-full animate-bounce delay-75"></div>
-                <div className="absolute -top-1 -left-3 w-2 h-2 bg-gradient-to-br from-teal-400 to-green-500 rounded-full animate-ping delay-150"></div>
-                <div className="absolute -top-0.5 -left-1 w-1 h-1 bg-gradient-to-br from-green-400 to-emerald-500 rotate-45 animate-pulse delay-225"></div>
-                <div className="absolute -top-3 -right-6 w-3 h-3 bg-gradient-to-br from-green-400 to-emerald-500 rotate-45 animate-spin delay-300"></div>
-                <div className="absolute -top-1 -right-3 w-1.5 h-1.5 bg-gradient-to-br from-emerald-400 to-cyan-500 rounded-full animate-bounce delay-375"></div>
-                <div className="absolute -bottom-2 -right-3 w-2.5 h-2.5 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-full animate-pulse delay-450"></div>
-                <div className="absolute -bottom-1 -left-1 w-2 h-2 bg-gradient-to-br from-teal-400 to-blue-500 rotate-45 animate-spin delay-525"></div>
-                
-                {/* Mini sparkles around tool name */}
-                <div className="absolute -top-2 left-2 w-0.5 h-0.5 bg-blue-300 rounded-full animate-ping delay-600"></div>
-                <div className="absolute -top-1 right-2 w-1 h-1 bg-teal-300 rounded-full animate-pulse delay-675"></div>
-                <div className="absolute bottom-0 left-4 w-0.5 h-0.5 bg-green-300 rounded-full animate-bounce delay-750"></div>
-                <div className="absolute bottom-1 right-4 w-0.5 h-0.5 bg-emerald-300 rounded-full animate-pulse delay-825"></div>
-                <div className="absolute top-2 -left-2 w-0.5 h-0.5 bg-cyan-300 rounded-full animate-ping delay-900"></div>
-                <div className="absolute top-2 -right-2 w-1 h-1 bg-teal-300 rounded-full animate-bounce delay-975"></div>
-              </div>
-            </div>
-            
-            {/* Ultra cute floating elements constellation around the entire group */}
-            <div className="absolute -top-10 -left-10 w-3 h-3 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full animate-float"></div>
-            <div className="absolute -top-8 -left-6 w-1.5 h-1.5 bg-gradient-to-br from-purple-400 to-pink-500 rotate-45 animate-spin delay-100"></div>
-            <div className="absolute -top-6 -left-12 w-2 h-2 bg-gradient-to-br from-pink-400 to-red-500 rounded-full animate-bounce delay-200"></div>
-            
-            <div className="absolute -top-10 -right-10 w-2.5 h-2.5 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-full animate-ping delay-300"></div>
-            <div className="absolute -top-6 -right-14 w-1 h-1 bg-gradient-to-br from-cyan-400 to-blue-500 rotate-45 animate-pulse delay-400"></div>
-            <div className="absolute -top-4 -right-8 w-3 h-3 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full animate-bounce delay-500"></div>
-            
-            <div className="absolute -bottom-10 -left-10 w-2 h-2 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full animate-pulse delay-600"></div>
-            <div className="absolute -bottom-8 -left-14 w-1.5 h-1.5 bg-gradient-to-br from-orange-400 to-red-500 rotate-45 animate-spin delay-700"></div>
-            <div className="absolute -bottom-6 -left-6 w-2.5 h-2.5 bg-gradient-to-br from-yellow-400 to-pink-500 rounded-full animate-float delay-800"></div>
-            
-            <div className="absolute -bottom-10 -right-10 w-3 h-3 bg-gradient-to-br from-green-400 to-teal-500 rotate-45 animate-bounce delay-900"></div>
-            <div className="absolute -bottom-8 -right-6 w-1 h-1 bg-gradient-to-br from-teal-400 to-cyan-500 rounded-full animate-ping delay-1000"></div>
-            <div className="absolute -bottom-6 -right-14 w-2 h-2 bg-gradient-to-br from-emerald-400 to-green-500 rounded-full animate-pulse delay-1100"></div>
-            
-            {/* Extra tiny magical sparkles */}
-            <div className="absolute -top-12 left-0 w-0.5 h-0.5 bg-yellow-300 rounded-full animate-ping delay-1200"></div>
-            <div className="absolute -top-2 -left-16 w-1 h-1 bg-pink-300 rounded-full animate-bounce delay-1300"></div>
-            <div className="absolute top-2 -right-18 w-0.5 h-0.5 bg-blue-300 rounded-full animate-pulse delay-1400"></div>
-            <div className="absolute -bottom-12 right-0 w-1 h-1 bg-purple-300 rounded-full animate-float delay-1500"></div>
-            <div className="absolute -bottom-2 -right-16 w-0.5 h-0.5 bg-green-300 rounded-full animate-ping delay-1600"></div>
-            <div className="absolute bottom-2 -left-18 w-1 h-1 bg-teal-300 rounded-full animate-bounce delay-1700"></div>
+    {/* ROO BEADZ Pixel Y2K main container */}
+    <div className="min-h-screen p-4 sm:p-6 flex flex-col items-center overflow-x-hidden" style={{ fontFamily: 'var(--font-body), sans-serif' }}>
+      {/* ROO BEADZ Header - Pixel Y2K style */}
+      <header className="w-full md:max-w-4xl text-center mt-6 mb-8 sm:mt-8 sm:mb-10">
+        <div className="relative z-10 py-6 px-6 border-3 bg-white dark:bg-gray-900" style={{ border: '3px solid #1a1a2e', boxShadow: '6px 6px 0px #1a1a2e' }}>
+          {/* Pixel bead grid icon */}
+          <div className="mb-4 inline-grid grid-cols-4 gap-1 p-3 border-2" style={{ borderColor: '#1a1a2e' }}>
+            {['#ff5096', '#60a5fa', '#ffd642', '#6ddb7a',
+              '#f472b6', '#fb923c', '#22d3ee', '#f5efe6',
+              '#1a1a2e', '#ff5096', '#6ddb7a', '#ffd642',
+              '#60a5fa', '#fb923c', '#f472b6', '#22d3ee'].map((color, i) => (
+              <div key={i} className="w-4 h-4" style={{ backgroundColor: color, border: '1px solid #1a1a2e' }}></div>
+            ))}
           </div>
+
+          {/* Brand name */}
+          <h1 className="text-3xl sm:text-5xl font-black tracking-wider" style={{ fontFamily: 'var(--font-pixel), monospace', color: '#ff5096', textShadow: '3px 3px 0px #1a1a2e' }}>
+            ROO BEADZ
+          </h1>
+
+          {/* Subtitle */}
+          <h2 className="mt-3 text-lg sm:text-2xl font-bold tracking-widest" style={{ fontFamily: 'var(--font-cn), var(--font-body), sans-serif', color: '#1a1a2e' }}>
+            拼豆底稿生成器
+          </h2>
+
           {/* Slogan */}
-          <p className="mt-3 text-sm sm:text-base font-light text-gray-500 dark:text-gray-400 text-center tracking-[0.15em]">
+          <p className="mt-2 text-sm font-medium tracking-wide" style={{ color: '#1a1a2e', opacity: 0.6 }}>
             让像素创意属于每一个人
           </p>
-
-          {/* 横屏设备弹窗 */}
-          {showDesktopModal && (
-            <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={() => setShowDesktopModal(false)}>
-              <div className="relative mx-4 w-full max-w-md rounded-2xl border border-blue-200 dark:border-blue-700 bg-white dark:bg-gray-800 p-6 shadow-2xl" onClick={e => e.stopPropagation()}>
-                <button
-                  onClick={() => setShowDesktopModal(false)}
-                  className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
-                    <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
-                  </svg>
-                </button>
-                <div className="flex flex-col items-center text-center">
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/40">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-6 h-6 text-blue-500 dark:text-blue-300">
-                      <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v8a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm1 0v8h12V4H4zm-1 12a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">专业工作台已上线</h3>
-                  <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">专业工作台拥有更完整的功能和更好的操作体验，推荐前往使用。</p>
-                  <div className="mt-5 flex w-full gap-3">
-                    <button
-                      onClick={() => setShowDesktopModal(false)}
-                      className="flex-1 rounded-xl border border-gray-300 dark:border-gray-600 px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                    >
-                      留在此页
-                    </button>
-                    <a
-                      href="https://perlerbeadsnew.zippland.com/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
-                    >
-                      前往专业工作台
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
-                        <path fillRule="evenodd" d="M3 10a1 1 0 011-1h9.586L11.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L13.586 11H4a1 1 0 01-1-1z" clipRule="evenodd" />
-                      </svg>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* 链接行：专业工作台· 小红书 · GitHub */}
-          <div className="mt-4 flex flex-wrap items-center justify-center gap-2.5 text-xs">
-            <a href="https://perlerbeadsnew.zippland.com/" target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-1 text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-medium transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
-                <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v8a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm1 0v8h12V4H4zm-1 12a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
-              </svg>
-              专业工作台
-              <span className="px-1 py-px rounded bg-indigo-500 text-[9px] font-bold text-white leading-none">NEW</span>
-            </a>
-            <span className="text-gray-300 dark:text-gray-600">·</span>
-            <a href="https://www.xiaohongshu.com/user/profile/623e8b080000000010007721" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-rose-500 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 font-medium transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 1024 1024" fill="currentColor">
-                <path d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64z m238.8 360.2l-57.7 93.3c-10.1 16.3-31.5 21.3-47.8 11.2l-112.4-69.5c-16.3-10.1-21.3-31.5-11.2-47.8l57.7-93.3c10.1-16.3 31.5-21.3 47.8-11.2l112.4 69.5c16.3 10.1 21.3 31.5 11.2 47.8zM448 496l-57.7 93.3c-10.1 16.3-31.5 21.3-47.8 11.2l-112.4-69.5c-16.3-10.1-21.3-31.5-11.2-47.8l57.7-93.3c10.1-16.3 31.5-21.3 47.8-11.2l112.4 69.5c16.3 10.1 21.3 31.5 11.2 47.8z m248.9 43.2l-57.7 93.3c-10.1 16.3-31.5 21.3-47.8 11.2l-112.4-69.5c-16.3-10.1-21.3-31.5-11.2-47.8l57.7-93.3c10.1-16.3 31.5-21.3 47.8-11.2l112.4 69.5c16.3 10.1 21.3 31.5 11.2 47.8z"/>
-              </svg>
-              小红书
-            </a>
-            <span className="text-gray-300 dark:text-gray-600">·</span>
-            <a href="https://github.com/Zippland/perler-beads" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 font-medium transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                <path fillRule="evenodd" d="M12 0C5.37 0 0 5.48 0 12.25c0 5.42 3.44 10.01 8.2 11.63.6.12.82-.27.82-.6 0-.3-.01-1.08-.02-2.13-3.34.74-4.04-1.65-4.04-1.65-.55-1.44-1.35-1.83-1.35-1.83-1.1-.78.08-.77.08-.77 1.21.09 1.85 1.26 1.85 1.26 1.08 1.9 2.83 1.35 3.52 1.03.11-.81.42-1.35.77-1.66-2.66-.31-5.46-1.36-5.46-6.06 0-1.34.46-2.43 1.22-3.29-.12-.31-.53-1.55.12-3.23 0 0 1-.33 3.29 1.25a10.96 10.96 0 0 1 5.98 0c2.29-1.58 3.29-1.25 3.29-1.25.65 1.68.24 2.92.12 3.23.76.86 1.22 1.95 1.22 3.29 0 4.71-2.81 5.74-5.49 6.05.43.38.81 1.13.81 2.28 0 1.65-.02 2.98-.02 3.39 0 .33.22.72.83.59C20.56 22.25 24 17.67 24 12.25 24 5.48 18.63 0 12 0Z" />
-              </svg>
-              GitHub
-            </a>
-          </div>
-          {/* 来源提示 */}
-          <p className="mt-2 text-[10px] text-gray-400 dark:text-gray-500">发布平台请标注来源或保留图片水印及标识</p>
         </div>
       </header>
 
-      {/* Apply dark mode styles to the main section */}
+      {/* Main section */}
       <main ref={mainRef} className="w-full md:max-w-4xl flex flex-col items-center space-y-5 sm:space-y-6 relative overflow-hidden">
-        {/* Apply dark mode styles to the Drop Zone */}
+        {/* Drop Zone - Pixel Y2K retro window */}
         <div
           onDrop={handleDrop} onDragOver={handleDragOver} onDragEnter={handleDragOver}
           onClick={isMounted ? triggerFileInput : undefined}
-          className={`border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 sm:p-8 text-center ${isMounted ? 'cursor-pointer hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-gray-800' : 'cursor-wait'} transition-all duration-300 w-full md:max-w-md flex flex-col justify-center items-center shadow-sm hover:shadow-md`}
-          style={{ minHeight: '130px' }}
+          className={`border-2 border-dashed p-6 sm:p-8 text-center ${isMounted ? 'cursor-pointer hover:bg-pink-50 dark:hover:bg-gray-800' : 'cursor-wait'} transition-all duration-300 w-full md:max-w-md flex flex-col justify-center items-center bg-white dark:bg-gray-900`}
+          style={{ minHeight: '130px', borderColor: '#1a1a2e', boxShadow: '4px 4px 0px #1a1a2e' }}
         >
-          {/* Icon color */}
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 sm:h-12 sm:w-12 text-gray-400 dark:text-gray-500 mb-2 sm:mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 sm:h-12 sm:w-12 mb-2 sm:mb-3" style={{ color: '#ff5096' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
              <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
           </svg>
-          {/* Text color */}
-          <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">拖放图片到此处，或<span className="font-medium text-blue-600 dark:text-blue-400">点击选择文件</span></p>
-          {/* Text color */}
-                          <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">支持 JPG, PNG 图片格式，或 CSV 数据文件</p>
+          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">拖放图片到此处，或<span className="font-medium" style={{ color: '#ff5096' }}>点击选择文件</span></p>
+          <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">支持 JPG, PNG 图片格式，或 CSV 数据文件</p>
         </div>
 
-        {/* Apply dark mode styles to the Tip Box */}
+        {/* Tip Box - Pixel Y2K style */}
         {!originalImageSrc && (
-          <div className="w-full md:max-w-md bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-700 p-3 rounded-lg border border-blue-100 dark:border-gray-600 shadow-sm">
-            {/* Icon color */}
-            <p className="text-xs text-indigo-700 dark:text-indigo-300 flex items-start">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5 flex-shrink-0 text-blue-500 dark:text-blue-400 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="w-full md:max-w-md p-3 bg-white dark:bg-gray-800" style={{ border: '2px solid #1a1a2e', boxShadow: '3px 3px 0px #1a1a2e' }}>
+            <p className="text-xs flex items-start" style={{ color: '#1a1a2e' }}>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5 flex-shrink-0 mt-0.5" style={{ color: '#ff5096' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              {/* Text color */}
-              <span className="text-indigo-700 dark:text-indigo-300">小贴士：使用像素图进行转换前，请确保图片的边缘吻合像素格子的边界线，这样可以获得更精确的切割效果和更好的成品。</span>
+              <span>小贴士：使用像素图进行转换前，请确保图片的边缘吻合像素格子的边界线，这样可以获得更精确的切割效果和更好的成品。</span>
             </p>
           </div>
         )}
@@ -2164,8 +1732,8 @@ export default function Home() {
           <div className="w-full flex flex-col items-center space-y-5 sm:space-y-6">
             {/* ++ HIDE Control Row in manual mode ++ */}
             {!isManualColoringMode && (
-              /* 修改控制面板网格布局 */
-              <div className="w-full md:max-w-2xl grid grid-cols-1 sm:grid-cols-2 gap-4 bg-white dark:bg-gray-800 p-4 sm:p-5 rounded-xl shadow-md border border-gray-100 dark:border-gray-700">
+              /* Control panel - Pixel Y2K retro window */
+              <div className="w-full md:max-w-2xl grid grid-cols-1 sm:grid-cols-2 gap-4 bg-white dark:bg-gray-800 p-4 sm:p-5" style={{ border: '3px solid #1a1a2e', boxShadow: '4px 4px 0px #1a1a2e' }}>
                 {/* Granularity Input */}
                 <div className="flex-1">
                   {/* Label color */}
@@ -2241,69 +1809,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* 色号系统选择器 */}
-                <div className="sm:col-span-2">
-                  <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5 sm:mb-2">色号系统:</label>
-                  <div className="flex flex-wrap gap-2">
-                    {colorSystemOptions.map(option => (
-                      <button
-                        key={option.key}
-                        onClick={() => setSelectedColorSystem(option.key as ColorSystem)}
-                        className={`px-3 py-2 text-sm rounded-lg border transition-all duration-200 flex-shrink-0 ${
-                          selectedColorSystem === option.key
-                            ? 'bg-blue-500 text-white border-blue-500 shadow-md transform scale-105'
-                            : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-gray-600'
-                        }`}
-                      >
-                        {option.name}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* 自定义色板按钮 */}
-                <div className="sm:col-span-2 mt-3">
-                  <button
-                    onClick={() => setIsCustomPaletteEditorOpen(true)}
-                    className="w-full py-2.5 px-3 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium rounded-lg shadow-sm transition-all duration-200 hover:shadow-md hover:from-blue-600 hover:to-purple-600"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M4 2a2 2 0 00-2 2v11a3 3 0 106 0V4a2 2 0 00-2-2H4zm1 14a1 1 0 100-2 1 1 0 000 2zm5-1.757l4.9-4.9a2 2 0 000-2.828L13.485 5.1a2 2 0 00-2.828 0L10 5.757v8.486zM16 18H9.071l6-6H16a2 2 0 012 2v2a2 2 0 01-2 2z" clipRule="evenodd" />
-                    </svg>
-                    管理色板 ({Object.values(customPaletteSelections).filter(Boolean).length} 色)
-                  </button>
-                  {isCustomPalette && (
-                    <p className="text-xs text-center text-blue-500 dark:text-blue-400 mt-1.5">当前使用自定义色板</p>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {/* 自定义色板编辑器弹窗 - 这是新增的部分 */}
-            {isCustomPaletteEditorOpen && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex justify-center items-center p-4">
-                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
-                   {/* 添加隐藏的文件输入框 */}
-                   <input
-                    type="file"
-                    accept=".json"
-                    ref={importPaletteInputRef}
-                    onChange={handleImportPaletteFile}
-                    className="hidden"
-                  />
-                  <div className="p-4 sm:p-6 flex-1 overflow-y-auto"> {/* 让内容区域可滚动 */}
-                    <CustomPaletteEditor
-                      allColors={fullBeadPalette}
-                      currentSelections={customPaletteSelections}
-                      onSelectionChange={handleSelectionChange}
-                      onSaveCustomPalette={handleSaveCustomPalette}
-                      onClose={() => setIsCustomPaletteEditorOpen(false)}
-                      onExportCustomPalette={handleExportCustomPalette}
-                      onImportCustomPalette={triggerImportPalette}
-                      selectedColorSystem={selectedColorSystem}
-                    />
-                  </div>
-                </div>
+                {/* Color system is hard-coded to MARD - selector removed */}
               </div>
             )}
 
@@ -2539,7 +2045,8 @@ export default function Home() {
              {/* Focus Mode Button */}
              <button
                 onClick={handleEnterFocusMode}
-                className={`w-full py-2.5 px-4 text-sm sm:text-base rounded-lg transition-all duration-300 flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white shadow-md hover:shadow-lg hover:translate-y-[-1px]`}
+                className={`w-full py-2.5 px-4 text-sm sm:text-base transition-all duration-300 flex items-center justify-center gap-2 text-white shadow-md hover:shadow-lg hover:translate-y-[-1px]`}
+                style={{ backgroundColor: '#ff5096', border: '2px solid #1a1a2e', boxShadow: '3px 3px 0px #1a1a2e' }}
               >
                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -2647,34 +2154,12 @@ export default function Home() {
         </>
       )}
 
-      {/* Apply dark mode styles to the Footer */}
-      <footer className="w-full md:max-w-4xl mt-10 mb-6 py-6 text-center text-xs sm:text-sm text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800/50 rounded-lg shadow-inner">
-
-        {/* Donation button styles are likely fine */}
-        <button
-          onClick={() => setIsDonationModalOpen(true)}
-          className="mb-5 px-6 py-2.5 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-full shadow-lg transition-all duration-300 hover:shadow-xl hover:translate-y-[-2px] flex items-center justify-center mx-auto"
-        >
-          {/* SVG and Text inside button */}
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M18 8h1a2 2 0 0 1 2 2v1c0 1.1-.9 2-2 2h-1" fill="#f9a8d4" />
-            <path d="M6 8h12v9a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3V8z" fill="#f9a8d4" />
-            <path d="M6 8V7a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v1" fill="#f472b6" />
-            <path d="M12 16v-4" stroke="#7d2a5a" />
-            <path d="M9.5 14.5L9 16" stroke="#7d2a5a" />
-            <path d="M14.5 14.5L15 16" stroke="#7d2a5a" />
-          </svg>
-          <span>请作者喝一杯奶茶</span>
-        </button>
-
-        {/* Copyright text color */}
-        <p className="font-medium text-gray-600 dark:text-gray-300">
-          七卡瓦 拼豆底稿生成器 &copy; {new Date().getFullYear()}
+      {/* Footer - Pixel Y2K style */}
+      <footer className="w-full md:max-w-4xl mt-10 mb-6 py-6 text-center text-xs sm:text-sm bg-white dark:bg-gray-900" style={{ border: '3px solid #1a1a2e', boxShadow: '4px 4px 0px #1a1a2e' }}>
+        <p className="font-bold" style={{ fontFamily: 'var(--font-pixel), monospace', color: '#ff5096', fontSize: '10px' }}>
+          ROO BEADZ &copy; {new Date().getFullYear()}
         </p>
       </footer>
-
-      {/* Donation Modal - 现在使用新的组件 */}
-      <DonationModal isOpen={isDonationModalOpen} onClose={() => setIsDonationModalOpen(false)} />
 
       {/* 使用导入的下载设置弹窗组件 */}
       <DownloadSettingsModal 

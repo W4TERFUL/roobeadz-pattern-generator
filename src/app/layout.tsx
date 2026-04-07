@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
+import { Press_Start_2P, Baloo_2, Noto_Sans_SC } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -13,14 +13,32 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const pressStart2P = Press_Start_2P({
+  variable: "--font-pixel",
+  weight: "400",
+  subsets: ["latin"],
+});
+
+const baloo2 = Baloo_2({
+  variable: "--font-body",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+});
+
+const notoSansSC = Noto_Sans_SC({
+  variable: "--font-cn",
+  subsets: ["latin"],
+  weight: ["700", "900"],
+});
+
 export const metadata: Metadata = {
-  title: "七卡瓦拼豆底稿生成器 | Perler Beads Generator",
-  description: "上传图片，调整精细度，一键生成像素画图纸，简单实用的像素画生成工具",
+  title: "ROO BEADZ Pattern Generator",
+  description: "Convert images to fuse bead patterns with MARD color matching",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "拼豆生成器",
+    title: "ROO BEADZ",
   },
   icons: {
     icon: [
@@ -34,7 +52,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#000000",
+  themeColor: "#ff5096",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -49,10 +67,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100`}
+        className={`${geistSans.variable} ${geistMono.variable} ${pressStart2P.variable} ${baloo2.variable} ${notoSansSC.variable} antialiased overflow-x-hidden bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100`}
       >
         {children}
-        <Analytics />
       </body>
     </html>
   );
